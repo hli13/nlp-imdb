@@ -1,88 +1,31 @@
-# Project Title
+# Sentiment Analysis of IMDb Reviews using NLP techniques
 
-One Paragraph of project description goes here
+In this project, Natural Language Processing (NLP) models are trained to detect the sentiment (positive or negative) of movie reviews. The data is preprocessed and tokenized with the help of [NLTK](https://www.nltk.org/) python package. Both the bag-of-words and language models are trained. The Recurrent Neural Network (RNN) with long short-term memory (LSTM) layers is used to incorporate the temporal infomation of the text. In addition, the trained language model is used to generate fake reviews with customizable sentiments.
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them
+## Dependencies
 
 ```
-Give examples
+numpy==1.16.4
+h5py==2.9.0
+matplotlib==3.1.0
 ```
 
-### Installing
+## Dataset
 
-A step by step series of examples that tell you how to get a development env running
+The [Large Movie Review dataset](https://ai.stanford.edu/~amaas/data/sentiment/) is used to train and evaluate the NLP models. It contains 25,000 labeled higly polar movie reviews and 25,000 unlabled reviews for testing.
 
-Say what the step will be
+## Implementation
 
-```
-Give the example
-```
+TBD
 
-And repeat
+## Hyerparameters
 
-```
-until finished
-```
+TBD
 
-End with an example of getting some data out of the system or using it for a little demo
+## Running the model
 
-## Running the tests
+TBD
 
-Explain how to run the automated tests for this system
+## Result
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
+TBD
