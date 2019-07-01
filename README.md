@@ -25,7 +25,22 @@ TBD
 
 ## Running the model
 
-TBD
+Run the following script to make sure required packages are installed.
+```
+pip install -r requirements.txt
+```
+Download the Large Movie Review dataset using the following command.
+```
+wget -O aclImdb.tar.gz https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
+```
+or
+```
+curl  -o aclImdb.tar.gz https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
+```
+Then, extract the file with
+```
+tar -xzf aclImdb.tar.gz
+```
 
 ## Result
 
