@@ -1,5 +1,7 @@
 # Sentiment Analysis of IMDb Reviews using NLP techniques
 
+> Code refactoring is in progress
+
 In this project, Natural Language Processing (NLP) models are trained to detect the sentiment (positive or negative) of movie reviews. The data is preprocessed and tokenized with the help of [NLTK](https://www.nltk.org/) python package. Both the bag-of-words and language models are trained. The Recurrent Neural Network (RNN) with long short-term memory (LSTM) layers is used to incorporate the temporal infomation of the text. In addition, the trained language model is used to generate fake reviews with customizable sentiments.
 
 ## Dependencies
