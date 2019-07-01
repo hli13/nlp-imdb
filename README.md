@@ -35,7 +35,7 @@ wget -O aclImdb.tar.gz https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.
 ```
 or
 ```
-curl  -o aclImdb.tar.gz https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
+curl -o aclImdb.tar.gz https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
 ```
 Then, extract the file with
 ```
