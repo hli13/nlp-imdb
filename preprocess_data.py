@@ -22,7 +22,6 @@ unsup_filenames = [train_directory+'unsup/'+filename for filename in unsup_filen
 
 filenames = pos_filenames + neg_filenames + unsup_filenames
 
-print(filenames)
 
 count = 0
 x_train = []
@@ -36,7 +35,7 @@ for filename in filenames:
 
     x_train.append(line)
     count += 1
-    print(count)
+print(count)
     
     
 ## get all of the test reviews
@@ -62,7 +61,7 @@ for filename in filenames:
 
     x_test.append(line)
     count += 1
-    print(count)
+print(count)
     
 
 ## number of tokens per review

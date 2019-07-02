@@ -43,6 +43,14 @@ Then, extract the file with
 ```
 tar -xzf aclImdb.tar.gz
 ```
+Download [GloVe](https://nlp.stanford.edu/projects/glove/) features with the following script.
+```
+wget http://nlp.stanford.edu/data/glove.840B.300d.zip
+```
+Then, extract the file
+```
+tar -xzf glove.840B.300d.zip
+```
 
 ## Result
 
