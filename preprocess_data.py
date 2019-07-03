@@ -5,71 +5,97 @@ nltk.download('punkt')
 import itertools
 import io
 
+
+# specify paths and directories
+preproc_dir = './preprocessed_data'
+imdb_dir = './aclImdb'
+
 ## create directory to store preprocessed data
-if(not os.path.isdir('preprocessed_data')):
-    os.mkdir('preprocessed_data')
+if(not os.path.isdir(preproc_dir)):
+    os.mkdir(preproc_dir)
+
+
+def read_reviews(data):
+    """
+    Read train/test reviews and remove unwanted texts
     
-## get all of the training reviews (including unlabeled reviews)
-train_directory = './aclImdb/train/'
-
-pos_filenames = os.listdir(train_directory + 'pos/')
-neg_filenames = os.listdir(train_directory + 'neg/')
-unsup_filenames = os.listdir(train_directory + 'unsup/')
-
-pos_filenames = [train_directory+'pos/'+filename for filename in pos_filenames]
-neg_filenames = [train_directory+'neg/'+filename for filename in neg_filenames]
-unsup_filenames = [train_directory+'unsup/'+filename for filename in unsup_filenames]
-
-filenames = pos_filenames + neg_filenames + unsup_filenames
-
-
-count = 0
-x_train = []
-for filename in filenames:
-    with io.open(filename,'r',encoding='utf-8') as f:
-        line = f.readlines()[0]
-    line = line.replace('<br />',' ')
-    line = line.replace('\x96',' ')
-    line = nltk.word_tokenize(line)
-    line = [w.lower() for w in line]
-
-    x_train.append(line)
-    count += 1
-print(count)
+    Parameters
+    ----------
+    data : str
+        type of the data to be processed 
+        option: train or test
+        
+    Returns
+    -------
+    x : list of list
+        a list of all reviews. each item contains one review that is tokenized 
+        and converted into a list of tokens (i.e., words and symbols)
+        
+    """
+    # get all of the training/testing reviews (including unlabeled reviews)
+    data_dir = imdb_dir + '/' + data + '/'
     
+    pos_filenames = []
+    neg_filenames = []
+    unsup_filenames = []
     
-## get all of the test reviews
-test_directory = './aclImdb/test/'
-
-pos_filenames = os.listdir(test_directory + 'pos/')
-neg_filenames = os.listdir(test_directory + 'neg/')
-
-pos_filenames = [test_directory+'pos/'+filename for filename in pos_filenames]
-neg_filenames = [test_directory+'neg/'+filename for filename in neg_filenames]
-
-filenames = pos_filenames+neg_filenames
-
-count = 0
-x_test = []
-for filename in filenames:
-    with io.open(filename,'r',encoding='utf-8') as f:
-        line = f.readlines()[0]
-    line = line.replace('<br />',' ')
-    line = line.replace('\x96',' ')
-    line = nltk.word_tokenize(line)
-    line = [w.lower() for w in line]
-
-    x_test.append(line)
-    count += 1
-print(count)
+    # get a list of filenames for each category of reviews
+    pos_filenames = os.listdir(data_dir + 'pos/')
+    neg_filenames = os.listdir(data_dir + 'neg/')
+    if (data == 'train'):
+        unsup_filenames = os.listdir(data_dir + 'unsup/')
     
+    # add the path to the directory in front of the filenames
+    pos_filenames = [data_dir+'pos/'+filename for filename in pos_filenames]
+    neg_filenames = [data_dir+'neg/'+filename for filename in neg_filenames]
+    if (data == 'train'):
+        unsup_filenames = [data_dir+'unsup/'+filename for filename in unsup_filenames]
+    
+    # concatenate all filenames together
+    filenames = pos_filenames + neg_filenames + unsup_filenames
+    
+    # process each file:
+    # - read the review
+    # - remove unwanted texts, 
+    # - tokenize each review
+    # - save in the output
+    count = 0
+    x = []
+    for filename in filenames:
+        with io.open(filename,'r',encoding='utf-8') as f:
+            line = f.readlines()[0]
+        line = line.replace('<br />',' ')
+        line = line.replace('\x96',' ')
+        line = nltk.word_tokenize(line)
+        line = [w.lower() for w in line]
+        x.append(line)
+        count += 1
+    
+    # print data info
+    data = data + 'ing'
+    print("\nNumber of %s reviews : %d" % (data, count))
+    
+    # number of tokens per review
+    no_of_tokens = []
+    for tokens in x:
+        no_of_tokens.append(len(tokens))
+    no_of_tokens = np.asarray(no_of_tokens)
+    print("Total number of tokens : %d" % np.sum(no_of_tokens))
+    print("Statistics of the number of tokens per review")
+    print("Min : %d" % np.min(no_of_tokens))
+    print("Max : %d" % np.max(no_of_tokens))
+    print("Mean : %d" % np.mean(no_of_tokens))
+    print("Std : %d" % np.std(no_of_tokens))
+    
+    return x
 
-## number of tokens per review
-no_of_tokens = []
-for tokens in x_train:
-    no_of_tokens.append(len(tokens))
-no_of_tokens = np.asarray(no_of_tokens)
-print('Total: ', np.sum(no_of_tokens), ' Min: ', np.min(no_of_tokens), ' Max: ', np.max(no_of_tokens), ' Mean: ', np.mean(no_of_tokens), ' Std: ', np.std(no_of_tokens))
+
+# read and tokenize training and testing datasets
+print("\nRead and Tokenize IMDb Reviews")
+print("-------------------------------")
+x_train = read_reviews('train')
+x_test = read_reviews('test')
+
 
 ### word_to_id and id_to_word. associate an id to every unique token in the training data
 all_tokens = itertools.chain.from_iterable(x_train)
