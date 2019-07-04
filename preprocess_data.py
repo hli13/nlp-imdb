@@ -83,10 +83,10 @@ def read_reviews(data):
     no_of_tokens = np.asarray(no_of_tokens)
     print("Total number of tokens : %d" % np.sum(no_of_tokens))
     print("Statistics of the number of tokens per review")
-    print("Min : %d" % np.min(no_of_tokens))
-    print("Max : %d" % np.max(no_of_tokens))
-    print("Mean : %d" % np.mean(no_of_tokens))
-    print("Std : %d" % np.std(no_of_tokens))
+    print("Min  : %5d" % np.min(no_of_tokens))
+    print("Max  : %5d" % np.max(no_of_tokens))
+    print("Mean : %5d" % np.mean(no_of_tokens))
+    print("Std  : %5d" % np.std(no_of_tokens))
     
     return x
 
@@ -130,14 +130,22 @@ def build_vocab(x_train, x_test):
     count = count[indices]
     
     hist = np.histogram(count,bins=[1,10,100,1000,10000])
+    print("\nHistogram of the overall token count :")
     print(hist)
-    for i in range(10):
-        print(id_to_word[i],count[i])
     
-    print(np.sum(count[0:100]))   
-    print(np.sum(count[0:8000]))
-        
-        
+    # the first 10 frequently used words/symbols
+    print("\nThe first 10 frequently used words/symbols :")
+    print("Word/Symbol \t Number of Occurances")
+    for i in range(10):
+        print("%7s \t %12d" % (id_to_word[i],count[i]))
+    
+    print("\nNumber of token count for the top 100 frequently used words/symbols \
+    : %d [%.2f%%]" % (np.sum(count[0:100]), 
+    100.0*np.sum(count[0:100])/np.sum(count)))
+    print("Number of token count for the top 8000 frequently used words/symbols \
+    : %d [%.2f%%]" % (np.sum(count[0:8000]), 
+    100.0*np.sum(count[0:8000])/np.sum(count)))
+    
     ## recreate word_to_id based on sorted list
     word_to_id = {token: idx for idx, token in enumerate(id_to_word)}
     
@@ -165,7 +173,75 @@ def build_vocab(x_train, x_test):
             for token in tokens:
                 f.write("%i " % token)
             f.write("\n")
+
+
+def glove_embed(x_train, x_test):
+    """
+    Create word embedding with GloVe features and save to files
     
+    Parameters
+    ----------
+    x_train : list of list
+        a list of tokenized training reviews. 
+        Each item contains one review that is tokenized and converted into a 
+        list of tokens (i.e., words and symbols)
+    x_test : list of list
+        a list of tokenized testing reviews. 
+        Each item contains one review that is tokenized and converted into a 
+        list of tokens (i.e., words and symbols)
+        
+    Returns
+    -------
+    None
+    """
+    # GloVe feature        
+    glove_filename = './glove.840B.300d.txt'
+    with io.open(glove_filename,'r',encoding='utf-8') as f:
+        lines = f.readlines()
+    
+    glove_dictionary = []
+    glove_embeddings = []
+    count = 0
+    for line in lines:
+        line = line.strip()
+        line = line.split(' ')
+        glove_dictionary.append(line[0])
+        embedding = np.asarray(line[1:],dtype=np.float)
+        glove_embeddings.append(embedding)
+        count+=1
+        if(count>=100000):
+            break
+    
+    glove_dictionary = np.asarray(glove_dictionary)
+    glove_embeddings = np.asarray(glove_embeddings)
+    # added a vector of zeros for the unknown tokens
+    glove_embeddings = np.concatenate((np.zeros((1,300)),glove_embeddings))
+    
+    word_to_id = {token: idx for idx, token in enumerate(glove_dictionary)}
+    
+    x_train_token_ids = [[word_to_id.get(token,-1)+1 for token in x] for x in x_train]
+    x_test_token_ids = [[word_to_id.get(token,-1)+1 for token in x] for x in x_test]
+    
+    dict_filename_glove = preproc_dir + '/glove_dictionary.npy'
+    embed_filename_glove = preproc_dir + '/glove_embeddings.npy'
+    
+    np.save(dict_filename_glove,glove_dictionary)
+    np.save(embed_filename_glove,glove_embeddings)
+    
+    train_filename_glove = preproc_dir + '/imdb_train_glove.txt'
+    with io.open(train_filename_glove,'w',encoding='utf-8') as f:
+        for tokens in x_train_token_ids:
+            for token in tokens:
+                f.write("%i " % token)
+            f.write("\n")
+    
+    test_filename_glove = preproc_dir + '/imdb_train_glove.txt'
+    with io.open(test_filename_glove,'w',encoding='utf-8') as f:
+        for tokens in x_test_token_ids:
+            for token in tokens:
+                f.write("%i " % token)
+            f.write("\n")
+
 
 # read and tokenize training and testing datasets
 print("\nRead and Tokenize IMDb Reviews")
@@ -178,47 +254,10 @@ print("\nBuild Dictionary Based on the Training Reviews")
 print("-----------------------------------------------")
 build_vocab(x_train, x_test)
 
-        
+# word embedding with GloVe features
+print("\nGenerate Word Embeddings with GloVe Features")
+print("--------------------------------------------")
+glove_embed(x_train, x_test)
 
-## GloVe Feature        
-glove_filename = './glove.840B.300d.txt'
-with io.open(glove_filename,'r',encoding='utf-8') as f:
-    lines = f.readlines()
-
-glove_dictionary = []
-glove_embeddings = []
-count = 0
-for line in lines:
-    line = line.strip()
-    line = line.split(' ')
-    glove_dictionary.append(line[0])
-    embedding = np.asarray(line[1:],dtype=np.float)
-    glove_embeddings.append(embedding)
-    count+=1
-    if(count>=100000):
-        break
-
-glove_dictionary = np.asarray(glove_dictionary)
-glove_embeddings = np.asarray(glove_embeddings)
-# added a vector of zeros for the unknown tokens
-glove_embeddings = np.concatenate((np.zeros((1,300)),glove_embeddings))
-
-word_to_id = {token: idx for idx, token in enumerate(glove_dictionary)}
-
-x_train_token_ids = [[word_to_id.get(token,-1)+1 for token in x] for x in x_train]
-x_test_token_ids = [[word_to_id.get(token,-1)+1 for token in x] for x in x_test]
-
-np.save('preprocessed_data/glove_dictionary.npy',glove_dictionary)
-np.save('preprocessed_data/glove_embeddings.npy',glove_embeddings)
-
-with io.open('preprocessed_data/imdb_train_glove.txt','w',encoding='utf-8') as f:
-    for tokens in x_train_token_ids:
-        for token in tokens:
-            f.write("%i " % token)
-        f.write("\n")
-
-with io.open('preprocessed_data/imdb_test_glove.txt','w',encoding='utf-8') as f:
-    for tokens in x_test_token_ids:
-        for token in tokens:
-            f.write("%i " % token)
-        f.write("\n")
+print("\nFinish Preprocessing Data")
+print("---------------------------")
