@@ -139,12 +139,10 @@ def build_vocab(x_train, x_test):
     for i in range(10):
         print("%7s \t %12d" % (id_to_word[i],count[i]))
     
-    print("\nNumber of token count for the top 100 frequently used words/symbols \
-    : %d [%.2f%%]" % (np.sum(count[0:100]), 
-    100.0*np.sum(count[0:100])/np.sum(count)))
-    print("Number of token count for the top 8000 frequently used words/symbols \
-    : %d [%.2f%%]" % (np.sum(count[0:8000]), 
-    100.0*np.sum(count[0:8000])/np.sum(count)))
+    print("\nToken count for the top 100 frequently used words/symbols : %d [%.2f%%]" 
+          % (np.sum(count[0:100]), 100.0*np.sum(count[0:100])/np.sum(count)))
+    print("Token count for the top 8000 frequently used words/symbols : %d [%.2f%%]" 
+          % (np.sum(count[0:8000]), 100.0*np.sum(count[0:8000])/np.sum(count)))
     
     ## recreate word_to_id based on sorted list
     word_to_id = {token: idx for idx, token in enumerate(id_to_word)}
@@ -243,21 +241,23 @@ def glove_embed(x_train, x_test):
             f.write("\n")
 
 
-# read and tokenize training and testing datasets
-print("\nRead and Tokenize IMDb Reviews")
-print("-------------------------------")
-x_train = read_reviews('train')
-x_test = read_reviews('test')
-
-# build dictionary and save to files
-print("\nBuild Dictionary Based on the Training Reviews")
-print("-----------------------------------------------")
-build_vocab(x_train, x_test)
-
-# word embedding with GloVe features
-print("\nGenerate Word Embeddings with GloVe Features")
-print("--------------------------------------------")
-glove_embed(x_train, x_test)
-
-print("\nFinish Preprocessing Data")
-print("---------------------------")
+if __name__ == "__main__":
+    
+    # read and tokenize training and testing datasets
+    print("\nRead and Tokenize IMDb Reviews")
+    print("-------------------------------")
+    x_train = read_reviews('train')
+    x_test = read_reviews('test')
+    
+    # build dictionary and save to files
+    print("\nBuild Dictionary Based on the Training Reviews")
+    print("-----------------------------------------------")
+    build_vocab(x_train, x_test)
+    
+    # word embedding with GloVe features
+    print("\nGenerate Word Embeddings with GloVe Features")
+    print("--------------------------------------------")
+    glove_embed(x_train, x_test)
+    
+    print("\nFinish Preprocessing Data")
+    print("---------------------------")

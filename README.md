@@ -9,8 +9,9 @@ In this project, Natural Language Processing (NLP) models are trained to detect 
 ```
 numpy==1.16.4
 matplotlib==3.1.0
-torch==0.4.1
-torchvision==0.2.1
+nltk==3.4.4
+torch==1.1.0
+torchvision==0.3.0
 ```
 
 ## Dataset
