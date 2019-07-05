@@ -233,7 +233,7 @@ def glove_embed(x_train, x_test):
                 f.write("%i " % token)
             f.write("\n")
     
-    test_filename_glove = preproc_dir + '/imdb_train_glove.txt'
+    test_filename_glove = preproc_dir + '/imdb_test_glove.txt'
     with io.open(test_filename_glove,'w',encoding='utf-8') as f:
         for tokens in x_test_token_ids:
             for token in tokens:

@@ -52,6 +52,11 @@ Then, extract the file
 ```
 tar -xzf glove.840B.300d.zip
 ```
+Preprocess the dataset with
+```
+python preprocess_data.py
+```
+The above script need to be run only **once**. It creates dictionaries, tokenized reviews, and word embeddings based on the data and the GloVe features. The preprocessed files are saved in `./preprocessed_data/`
 
 ## Result
 
